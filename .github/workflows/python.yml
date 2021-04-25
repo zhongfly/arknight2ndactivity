@@ -28,3 +28,4 @@ jobs:
       run: python3 arknight2nd.py
       env:
           COOKIES: ${{ secrets.COOKIES }}
+          SCT_SCENDKEY: ${{ secrets.SCT_SCENDKEY }}
