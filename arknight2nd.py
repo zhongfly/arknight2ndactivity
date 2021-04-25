@@ -23,7 +23,7 @@ class activity:
         if r.status_code == 200:
             userinfo = r.json()["data"]
             self.roll_chance = userinfo["rollChance"]
-            self.is_share = userinfo["share"]
+            self.is_share = not userinfo["share"]
             return userinfo
         else:
             raise Exception("get_userinfo Error! status_code:" +
