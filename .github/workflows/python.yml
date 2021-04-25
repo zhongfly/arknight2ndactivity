@@ -29,3 +29,5 @@ jobs:
       env:
           COOKIES: ${{ secrets.COOKIES }}
           SCT_SCENDKEY: ${{ secrets.SCT_SCENDKEY }}
+          EMAIL: ${{ secrets.EMAIL }}
+          TELEGRAM: ${{ secrets.TELEGRAM }}

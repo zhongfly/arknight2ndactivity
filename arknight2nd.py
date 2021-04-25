@@ -91,10 +91,27 @@ def push(content):
         data = {"title":"【明日方舟】庆典筹备计划每日任务","desp":content}
         r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send",data=data)
 
+    def email(target,content):
+        data = {"title": "【明日方舟】庆典筹备计划每日任务", "text": content,"to":target}
+        r = requests.post("https://email.berfen.com/api",data=data)
+
+    def telegram(keys,content):
+        token,chat_id = keys.split(",")
+        data = {"text": content,"chat_id":chat_id}
+        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage")
+
     sct_sendkey: str = os.environ.get('SCT_SCENDKEY', None)
     if sct_sendkey:
         sct(sct_sendkey,content)
         print("已使用Server酱·Turbo版进行推送")
+    email_target: str = os.environ.get('EMAIL', None)
+    if email_target:
+        email(email_target,content)
+        print("已使用邮箱推送")
+    telegram_str: str = os.environ.get('TELEGRAM', None)
+    if telegram_str:
+        telegram(telegram_str,content)
+        print("telegram")
 
 def cookie_str2dict(cookies_str: str):
     cookies_dict = {}
