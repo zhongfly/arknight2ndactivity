@@ -98,7 +98,7 @@ def push(content):
     def telegram(keys,content):
         token,chat_id = keys.split(",")
         data = {"text": content,"chat_id":chat_id}
-        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage")
+        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage",data=data)
 
     sct_sendkey: str = os.environ.get('SCT_SCENDKEY', None)
     if sct_sendkey:
@@ -111,7 +111,7 @@ def push(content):
     telegram_str: str = os.environ.get('TELEGRAM', None)
     if telegram_str:
         telegram(telegram_str,content)
-        print("telegram")
+        print("已使用telegram推送")
 
 def cookie_str2dict(cookies_str: str):
     cookies_dict = {}
