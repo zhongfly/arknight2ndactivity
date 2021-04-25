@@ -77,10 +77,24 @@ class activity:
             self.roll()
         info = self.get_userinfo()
         share_str = "今日尚未分享活动页面" if info["share"] else "今日已分享活动页面"
-        roll_str = f"今日已获得收集「调色奶油袋」{2-info['rollChance']}个"
-        print(
-            f"uid为{info['uid']}的玩家活动参与情况：{share_str}，{roll_str}，目前拥有「美味值」：{info['remainCoin']}，助力收集「原料数」：{info['totalPoint']}")
+        roll_str = f"今日已收集「调色奶油袋」{2-info['rollChance']}个"
+        result = f"uid为{info['uid']}的玩家活动参与情况：{share_str}，{roll_str}，目前拥有「美味值」：{info['remainCoin']}，助力收集「原料数」：{info['totalPoint']}"
+        print(result)
+        return result
 
+    def sct(sendkey,content):
+        data = {"title":"【明日方舟】庆典筹备计划每日任务","desp":content}
+        r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send",data=data)
+
+def push(content):
+    def sct(sendkey,content):
+        data = {"title":"【明日方舟】庆典筹备计划每日任务","desp":content}
+        r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send",data=data)
+
+    sct_sendkey: str = os.environ.get('SCT_SCENDKEY', None)
+    if sct_sendkey:
+        sct(sct_sendkey,content)
+        print("已使用Server酱·Turbo版进行推送")
 
 def cookie_str2dict(cookies_str: str):
     cookies_dict = {}
@@ -98,7 +112,8 @@ def main():
     if users:
         for i, cookie_str in enumerate(users.split("\n")):
             a = activity(cookie_str2dict(cookie_str))
-            a.daily()
+            result = a.daily()
+            push(result)
     else:
         print("未找到用户信息")
 
