@@ -126,11 +126,12 @@ def cookie_str2dict(cookies_str: str):
 
 def main():
     users: str = os.environ.get('COOKIES', None)
+    result = ""
     if users:
         for i, cookie_str in enumerate(users.split("\n")):
             a = activity(cookie_str2dict(cookie_str))
-            result = a.daily()
-            push(result)
+            result += a.daily()
+        push(result)
     else:
         print("未找到用户信息")
 
