@@ -116,7 +116,7 @@ def push(content):
         print("已使用telegram推送")
     wx_template: str = os.environ.get('WX_TEMPLATE', None)
     if wx_template:
-        appID, appsecret, template_id = wx_template.strip().split(",")
+        appID, appsecret, template_id, touser = wx_template.strip().split(",")
         wx = template_push(appID, appsecret, template_id)
         wx.push(touser, f"【明日方舟】庆典筹备计划每日任务\n{content}")
         print("已使用微信模板推送")
@@ -145,7 +145,7 @@ def main():
     if users:
         for i, cookie_str in enumerate(users.split("\n")):
             a = activity(cookie_str2dict(cookie_str))
-            result = result + a.daily() +"\n"
+            result = result + a.daily() + "\n"
         push(result.rstrip("\n"))
     else:
         print("未找到用户信息")
