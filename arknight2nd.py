@@ -130,8 +130,8 @@ def main():
     if users:
         for i, cookie_str in enumerate(users.split("\n")):
             a = activity(cookie_str2dict(cookie_str))
-            result = result + a.daily() +"/n"
-        push(result.rstrip("/n"))
+            result = result + a.daily() +"\n"
+        push(result.rstrip("\n"))
     else:
         print("未找到用户信息")
 
