@@ -2,6 +2,7 @@
 import os
 
 import requests
+from wxpusher import template_push, qyweixin
 
 
 class activity:
@@ -82,36 +83,50 @@ class activity:
         print(result)
         return result
 
-    def sct(sendkey,content):
-        data = {"title":"【明日方舟】庆典筹备计划每日任务","desp":content}
-        r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send",data=data)
+    def sct(sendkey, content):
+        data = {"title": "【明日方舟】庆典筹备计划每日任务", "desp": content}
+        r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send", data=data)
+
 
 def push(content):
-    def sct(sendkey,content):
-        data = {"title":"【明日方舟】庆典筹备计划每日任务","desp":content}
-        r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send",data=data)
+    def sct(sendkey, content):
+        data = {"title": "【明日方舟】庆典筹备计划每日任务", "desp": content}
+        r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send", data=data)
 
-    def email(target,content):
-        data = {"title": "【明日方舟】庆典筹备计划每日任务", "text": content,"to":target}
-        r = requests.post("https://email.berfen.com/api",data=data)
+    def email(target, content):
+        data = {"title": "【明日方舟】庆典筹备计划每日任务", "text": content, "to": target}
+        r = requests.post("https://email.berfen.com/api", data=data)
 
-    def telegram(keys,content):
-        token,chat_id = keys.split(",")
-        data = {"text": content,"chat_id":chat_id}
-        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage",data=data)
+    def telegram(keys, content):
+        token, chat_id = keys.strip().split(",")
+        data = {"text": content, "chat_id": chat_id}
+        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage")
 
     sct_sendkey: str = os.environ.get('SCT_SCENDKEY', None)
     if sct_sendkey:
-        sct(sct_sendkey,content)
+        sct(sct_sendkey, content)
         print("已使用Server酱·Turbo版进行推送")
     email_target: str = os.environ.get('EMAIL', None)
     if email_target:
-        email(email_target,content)
+        email(email_target, content)
         print("已使用邮箱推送")
     telegram_str: str = os.environ.get('TELEGRAM', None)
     if telegram_str:
-        telegram(telegram_str,content)
+        telegram(telegram_str, content)
         print("已使用telegram推送")
+    wx_template: str = os.environ.get('WX_TEMPLATE', None)
+    if wx_template:
+        appID, appsecret, template_id = wx_template.strip().split(",")
+        wx = template_push(appID, appsecret, template_id)
+        wx.push(touser, f"【明日方舟】庆典筹备计划每日任务\n{content}")
+        print("已使用微信模板推送")
+    wx_qy: str = os.environ.get('WX_QY', None)
+    if wx_qy:
+        corpid, secret, agentid = wx_qy.strip().split(",")
+        wx = qyweixin(corpid, secret, agentid)
+        wx.push(f"【明日方舟】庆典筹备计划每日任务\n{content}", "@all")
+        print("已使用企业微信应用消息推送")
+
 
 def cookie_str2dict(cookies_str: str):
     cookies_dict = {}
@@ -134,6 +149,7 @@ def main():
         push(result.rstrip("\n"))
     else:
         print("未找到用户信息")
+
 
 if __name__ == "__main__":
     main()
