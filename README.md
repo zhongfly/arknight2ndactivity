@@ -3,6 +3,9 @@
 
 # 使用简介
 1.打开活动网页，登录账号，按F12打开开发者工具--》刷新网页--》按如下步骤，找到cookie，复制cookie：后的内容
+
+注意：请勿在网页上退出登录，退出登录就会使cookie失效。如果不想在浏览器上保留登录状态，请使用浏览器的无痕浏览功能。
+
 ![获得cookie](https://user-images.githubusercontent.com/11155705/115988114-c3276000-a5ea-11eb-9e41-50fc16e701dc.png)
 
 2.“Settings” --》“Secrets” 中点击New repository secret，Name填"COOKIES"（不含引号），Value填步骤1得到的cookie内容。如果有多个账号，按如下格式：
