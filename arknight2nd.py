@@ -100,7 +100,7 @@ def push(content):
     def telegram(keys, content):
         token, chat_id = keys.strip().split(",")
         data = {"text": content, "chat_id": chat_id}
-        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage")
+        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage",data=data)
 
     sct_sendkey: str = os.environ.get('SCT_SCENDKEY', None)
     if sct_sendkey:
