@@ -83,10 +83,6 @@ class activity:
         print(result)
         return result
 
-    def sct(sendkey, content):
-        data = {"title": "【明日方舟】庆典筹备计划每日任务", "desp": content}
-        r = requests.post(f"https://sctapi.ftqq.com/{sendkey}.send", data=data)
-
 
 def push(content):
     def sct(sendkey, content):
@@ -100,7 +96,9 @@ def push(content):
     def telegram(keys, content):
         token, chat_id = keys.strip().split(",")
         data = {"text": content, "chat_id": chat_id}
-        r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage",data=data)
+        r = requests.post(
+            f"https://api.telegram.org/bot{token}/sendMessage",
+            data=data)
 
     sct_sendkey: str = os.environ.get('SCT_SCENDKEY', None)
     if sct_sendkey:
@@ -144,8 +142,12 @@ def main():
     result = ""
     if users:
         for i, cookie_str in enumerate(users.split("\n")):
-            a = activity(cookie_str2dict(cookie_str))
-            result = result + a.daily() + "\n"
+            try:
+                a = activity(cookie_str2dict(cookie_str))
+                result = result + a.daily() + "\n"
+            except Exception as e:
+                print(f"完成第{i+1}名玩家的任务时出现错误：{str(e)}")
+                result = result + f"完成第{i+1}名玩家的任务时出现错误：{str(e)}" + "\n"
         push(result.rstrip("\n"))
     else:
         print("未找到用户信息")
